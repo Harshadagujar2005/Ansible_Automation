@@ -7,7 +7,9 @@ Ansible handles the Deploy / Operate stage of the DevOps lifecycle.
 Ansible automation for deploying a company website on an Nginx web server. The project has an inventory with hosts, groups and variables, and a reusable playbook that installs packages, renders a Jinja2 template, manages the Nginx service with a handler, and verifies the site. A second run shows no changes (idempotent).
 
 ## Demo video
-The demo video link, with a short description of the video, is in `Demo_video_Link_Ansible.docx`.
+Watch the demo: https://drive.google.com/file/d/1dv-LX6NuNDAZSmJwyhSeY_IUbbPImmDL/view?usp=sharing
+
+The video first explains the key concepts (DevOps lifecycle, architecture, Ansible inventory and playbook), then shows a live demonstration of deploying the Nginx website with Ansible, including the second run that shows no changes. The link and a short description are also in `Demo_video_Link_Ansible.docx`.
 
 ## Files
 - `inventory.ini`: hosts and groups (`webservers`, `production`) with group variables
