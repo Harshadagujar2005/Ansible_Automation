@@ -1,0 +1,46 @@
+---
+- name: Configure web servers for company website
+  hosts: webservers
+  become: true
+  vars:
+    site_title: "MyCompany Portal"
+    packages:
+      - nginx
+      - curl
+      - git
+
+  tasks:
+    - name: Update apt cache
+      ansible.builtin.apt:
+        update_cache: yes
+        cache_valid_time: 3600
+
+    - name: Install required packages
+      ansible.builtin.apt:
+        name: "{{ packages }}"
+        state: present
+
+    - name: Deploy website homepage from template
+      ansible.builtin.template:
+        src: templates/index.html.j2
+        dest: /var/www/html/index.html
+        owner: www-data
+        mode: '0644'
+      notify: Restart nginx
+
+    - name: Ensure nginx is started and enabled
+      ansible.builtin.service:
+        name: nginx
+        state: started
+        enabled: yes
+
+    - name: Verify website responds
+      ansible.builtin.uri:
+        url: "http://localhost:{{ http_port }}"
+        status_code: 200
+
+  handlers:
+    - name: Restart nginx
+      ansible.builtin.service:
+        name: nginx
+        state: restarted

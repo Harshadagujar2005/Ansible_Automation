@@ -1,0 +1,33 @@
+# DevOps Ansible Project: Nginx Company Website
+
+Scenario: automated deployment of a company website on an Nginx web server.
+Ansible handles the Deploy / Operate stage of the DevOps lifecycle.
+
+## Files
+- `inventory.ini`: hosts and groups (`webservers`, `production`) with group variables
+- `ansible.cfg`: points Ansible at the inventory
+- `site.yml`: the playbook (packages, template, service, handler, verification)
+- `templates/index.html.j2`: Jinja2 template for the homepage
+- `run.sh`: runs every step in order, for screenshots
+
+## Prerequisites
+- Windows with WSL2 + Ubuntu, systemd enabled (`/etc/wsl.conf` containing `[boot]` and `systemd=true`, then `wsl --shutdown`)
+- Ansible: `sudo apt install -y ansible`
+- Passwordless sudo for the lab user:
+  `echo "<user> ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/<user>`
+
+## Run
+    cd ~/devops-ansible
+    bash run.sh
+
+or step by step:
+
+    ansible all -m ping
+    ansible-inventory --graph
+    ansible-playbook site.yml --syntax-check
+    ansible-playbook site.yml          # first run: changes
+    ansible-playbook site.yml          # second run: changed=0 (idempotent)
+    ansible-playbook site.yml --check  # dry run
+    ansible webservers -m command -a "systemctl status nginx" -b
+
+Then open http://localhost in a browser.
